@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import "./app.css";  // main css file
 import Quiz from './components/Quiz';  // Quiz file
+import Timer from './components/Timer';  // Timer file
 
 function App() {
   const [questionNumber, setQuestionNumber] = useState(1);
   const [stop, setStop] = useState(false);
+  const [earned, setEarned] = useState("₹ 0");
 
   const data = [
     {
@@ -75,51 +77,67 @@ function App() {
     }
   ];
 
-  const moneyPyramid = [
-    {id: 1, amount: "₹ 1,000"},
-    {id: 2, amount: "₹ 2,000"},
-    {id: 3, amount: "₹ 3,000"},
-    {id: 4, amount: "₹ 5,000"},
-    {id: 5, amount: "₹ 10,000"},
-    {id: 6, amount: "₹ 20,000"},
-    {id: 7, amount: "₹ 40,000"},
-    {id: 8, amount: "₹ 80,000"},
-    {id: 9, amount: "₹ 1,60,000"},
-    {id: 10, amount: "₹ 3,20,000"},
-    {id: 11, amount: "₹ 6,40,000"},
-    {id: 12, amount: "₹ 12,50,000"},
-    {id: 13, amount: "₹ 25,00,000"},
-    {id: 14, amount: "₹ 50,00,000"},
-    {id: 15, amount: "₹ 75,00,000"},
-    {id: 16, amount: "₹ 1 CRORE"},
-    {id: 17, amount: "₹ 7.5 CRORE"}
-  ].reverse();
-  
+  const moneyPyramid = useMemo(() =>
+    [
+      { id: 1, amount: "₹ 1,000" },
+      { id: 2, amount: "₹ 2,000" },
+      { id: 3, amount: "₹ 3,000" },
+      { id: 4, amount: "₹ 5,000" },
+      { id: 5, amount: "₹ 10,000" },
+      { id: 6, amount: "₹ 20,000" },
+      { id: 7, amount: "₹ 40,000" },
+      { id: 8, amount: "₹ 80,000" },
+      { id: 9, amount: "₹ 1,60,000" },
+      { id: 10, amount: "₹ 3,20,000" },
+      { id: 11, amount: "₹ 6,40,000" },
+      { id: 12, amount: "₹ 12,50,000" },
+      { id: 13, amount: "₹ 25,00,000" },
+      { id: 14, amount: "₹ 50,00,000" },
+      { id: 15, amount: "₹ 75,00,000" },
+      { id: 16, amount: "₹ 1 CRORE" },
+      { id: 17, amount: "₹ 7.5 CRORE" }
+    ].reverse(),
+    []
+  );
+
+  // to set total earned money, before wrong answer
+  useEffect(() => {
+    questionNumber > 1 && setEarned(moneyPyramid.find((m) => m.id === questionNumber - 1).amount);
+  }, [moneyPyramid, questionNumber])
+
   return (
     <div className="app">
       <div className="main">
-        <div className="top">
-          <div className="timer">30</div>
-        </div>
-        <div className="bottom">
-          <Quiz 
-            data={data} 
-            setStop={setStop}
-            questionNumber={questionNumber} 
-            setQuestionNumber={setQuestionNumber}
-          />  
-        </div>
+        {stop ?
+          (<h1 className="endText">You earned: {earned}</h1>) : (
+            <>
+              <div className="top">
+                <div className="timer">
+                  <Timer setStop={setStop} questionNumber={questionNumber}/>
+                </div>
+              </div>
+              <div className="bottom">
+                <Quiz
+                  data={data}
+                  setStop={setStop}
+                  questionNumber={questionNumber}
+                  setQuestionNumber={setQuestionNumber}
+                />
+              </div>
+            </>
+          )}
       </div>
+
       <div className="pyramid">
         <ul className="moneyList">
 
-          {moneyPyramid.map((m)=> (
+          {moneyPyramid.map((m) => (
             <li className={questionNumber === m.id ? "moneyListItem active" : "moneyListItem"}>
-            <span className="moneyListItemNumber">{m.id}</span>
-            <span className="moneyListItemAmount">{m.amount}</span>
-          </li>
+              <span className="moneyListItemNumber">{m.id}</span>
+              <span className="moneyListItemAmount">{m.amount}</span>
+            </li>
           ))}
-          
+
         </ul>
       </div>
     </div>
