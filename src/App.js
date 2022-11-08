@@ -66,12 +66,78 @@ function App() {
           correct: false,
         },
         {
-          text: "Denzel Washington",
+          text: "Alok kumar",
           correct: false,
         },
         {
           text: "Denzel Washington",
           correct: true,
+        }
+      ]
+    },
+    {
+      id: 4,
+      question: "Which of the following keywords is used to define a variable in Javascript?",
+      answers: [
+        {
+          text: "var",
+          correct: false,
+        },
+        {
+          text: "let",
+          correct: false,
+        },
+        {
+          text: "Both A and B",
+          correct: true,
+        },
+        {
+          text: "None of the above",
+          correct: false,
+        }
+      ]
+    },
+    {
+      id: 5,
+      question: "How can a datatype be declared to be a constant type?",
+      answers: [
+        {
+          text: "const",
+          correct: true,
+        },
+        {
+          text: "let",
+          correct: false,
+        },
+        {
+          text: "var",
+          correct: false,
+        },
+        {
+          text: "constant",
+          correct: false,
+        }
+      ]
+    },
+    {
+      id: 6,
+      question: "When an operator’s value is NULL, the typeof returned by the unary operator is:",
+      answers: [
+        {
+          text: "boolean",
+          correct: false,
+        },
+        {
+          text: "undefined",
+          correct: false,
+        },
+        {
+          text: "object",
+          correct: true,
+        },
+        {
+          text: "integer",
+          correct: false,
         }
       ]
     }
