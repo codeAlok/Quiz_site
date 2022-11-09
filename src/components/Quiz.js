@@ -1,10 +1,23 @@
 import {useEffect, useState} from 'react';
+import useSound from 'use-sound';  // from npm to useSound (react-hooks)
+import correct from "../assets/correct.mp3";
+import lock from "../assets/lock.mp3";
+import wrong from "../assets/wrong.mp3";
+
 
 function Quiz({data, setStop, questionNumber, setQuestionNumber}) {
 
     const [question, setQuestion] = useState(null);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [className, setClassName] = useState("answer");
+
+    const [letsPlay] = useSound(lock);
+    const [correctAnswer] = useSound(correct);
+    const [wrongAnswer] = useSound(wrong);
+
+    useEffect(()=> {
+        letsPlay();
+    }, [letsPlay]);
 
     useEffect(()=> {
         setQuestion(data[questionNumber - 1])
@@ -25,13 +38,20 @@ function Quiz({data, setStop, questionNumber, setQuestionNumber}) {
         });
 
         // 3s(animation) + 3s(check) = 6s (stop game/next question)
-        delay(6000, () => {
+        delay(5000, () => {
             if(a.correct){
-                setQuestionNumber(prev=> prev + 1);
-                setSelectedAnswer(null);
+                // play sound & change question or end game after 1sec.
+                correctAnswer();
+                delay(2000, ()=> {
+                    setQuestionNumber(prev=> prev + 1);
+                    setSelectedAnswer(null);
+                });
             }
             else{
-                setStop(true);
+                wrongAnswer();
+                delay(2000, ()=> {
+                    setStop(true);
+                });
             }
         });
     };
